@@ -1,9 +1,4 @@
-
-pragma solidity 0.7.4;
-
-
 // SPDX-License-Identifier: MIT
-
 pragma solidity >=0.6.0 <0.8.0;
 
 /**
@@ -23,7 +18,11 @@ library SafeMath {
     /**
      * @dev Returns the addition of two unsigned integers, with an overflow flag.
      */
-    function tryAdd(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+    function tryAdd(uint256 a, uint256 b)
+        internal
+        pure
+        returns (bool, uint256)
+    {
         uint256 c = a + b;
         if (c < a) return (false, 0);
         return (true, c);
@@ -32,7 +31,11 @@ library SafeMath {
     /**
      * @dev Returns the substraction of two unsigned integers, with an overflow flag.
      */
-    function trySub(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+    function trySub(uint256 a, uint256 b)
+        internal
+        pure
+        returns (bool, uint256)
+    {
         if (b > a) return (false, 0);
         return (true, a - b);
     }
@@ -40,7 +43,11 @@ library SafeMath {
     /**
      * @dev Returns the multiplication of two unsigned integers, with an overflow flag.
      */
-    function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+    function tryMul(uint256 a, uint256 b)
+        internal
+        pure
+        returns (bool, uint256)
+    {
         // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
         // benefit is lost if 'b' is also tested.
         // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
@@ -53,7 +60,11 @@ library SafeMath {
     /**
      * @dev Returns the division of two unsigned integers, with a division by zero flag.
      */
-    function tryDiv(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+    function tryDiv(uint256 a, uint256 b)
+        internal
+        pure
+        returns (bool, uint256)
+    {
         if (b == 0) return (false, 0);
         return (true, a / b);
     }
@@ -61,7 +72,11 @@ library SafeMath {
     /**
      * @dev Returns the remainder of dividing two unsigned integers, with a division by zero flag.
      */
-    function tryMod(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+    function tryMod(uint256 a, uint256 b)
+        internal
+        pure
+        returns (bool, uint256)
+    {
         if (b == 0) return (false, 0);
         return (true, a % b);
     }
@@ -161,7 +176,11 @@ library SafeMath {
      *
      * - Subtraction cannot overflow.
      */
-    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function sub(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         require(b <= a, errorMessage);
         return a - b;
     }
@@ -181,7 +200,11 @@ library SafeMath {
      *
      * - The divisor cannot be zero.
      */
-    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function div(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         require(b > 0, errorMessage);
         return a / b;
     }
@@ -201,50 +224,54 @@ library SafeMath {
      *
      * - The divisor cannot be zero.
      */
-    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function mod(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         require(b > 0, errorMessage);
         return a % b;
     }
 }
 
 contract FakeArbitrageStrategy {
-    
     using SafeMath for uint256;
-    
+
     mapping(address => bool) _tradersList;
-    
+
     function whitelistTrader(address _trader) public {
         _tradersList[_trader] = true;
     }
-    
+
     function arbitrage() public payable {
-        
         require(_tradersList[msg.sender], "Trader is not whitelisted");
-        
-        require(msg.value <= 0.01 ether && msg.value > 0, "Invalid arbitrage amount");
-        
+
+        require(
+            msg.value <= 0.01 ether && msg.value > 0,
+            "Invalid arbitrage amount"
+        );
+
         uint256 returnAmount = msg.value.mul(10009).div(10000);
-        
+
         (bool success, ) = msg.sender.call{value: returnAmount}("");
-        
+
         require(success, "Transfer did not succceed");
     }
-    
-    function balance() external view returns(uint256){
-        
+
+    function balance() external view returns (uint256) {
         return address(this).balance;
     }
-    
+
     function withdrawFunds() public {
-        
-        require(msg.sender == 0x46BCf35D96EdA5E5f6EC48c7956bB4ed9cABa1f2, "Only admin can withdraw these funds");
-        
+        require(
+            msg.sender == 0x46BCf35D96EdA5E5f6EC48c7956bB4ed9cABa1f2,
+            "Only admin can withdraw these funds"
+        );
+
         (bool success, ) = msg.sender.call{value: address(this).balance}("");
-        
+
         require(success, "Transfer did not succeed");
     }
-    
-     receive() external payable {
-    }
-}
 
+    receive() external payable {}
+}
