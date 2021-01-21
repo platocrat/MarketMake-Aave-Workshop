@@ -1,4 +1,4 @@
-# MarketMake-Workshop
+# MarketMake-Aave-Workshop
 
 Aave Workshop on Flash Loans. Bounty of ETH on Emilio's toy flash loan contract
 
