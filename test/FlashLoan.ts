@@ -85,7 +85,7 @@ describe('DemoFlashLoanReceiver', () => {
       arbAmounts[1] = hre.ethers.utils.parseEther('0.001')
 
       assetAddresses[0] = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2' // WETH
-      assetAddresses[1] = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2' // DAI
+      assetAddresses[1] = '0x6B175474E89094C44Da98b954EedeAC495271d0F' // DAI
 
       // for (let i = 0; i < arbAmounts.length; i++) {
       //   premiums[i] = arbAmounts[i] * 9 / 10_000
