@@ -11,13 +11,17 @@ import { Signer } from 'ethers'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { JsonRpcSigner } from '@ethersproject/providers'
+import { W } from '../typechain'
 
 describe('DemoFlashLoanReceiver', () => {
   let myAddress: string = '0x97fC2e88D19523F0011Ed3bB4AC592802DC435Ab',
     attacker: string,
+    weth: any,
     attackerSigner: JsonRpcSigner,
     fakeArbitrageStrategy: Contract,
     demoFlashLoanReceiver: any
+
+  const wethAddress: string = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
 
   before(async () => {
     // Initialize `FakeArbitrageStrategy` contract
@@ -35,6 +39,8 @@ describe('DemoFlashLoanReceiver', () => {
       'FakeArbitrageStrategy',
       '0x8F1034CBE5827b381067fCEfA727C069c26270c4'
     )
+
+    weth = await hre.ethers.getContractAt('IERC20', wethAddress) as Dai
 
     // Used to call `arbitrage()` function from `FakeArbitrageStrategy` contract
     // through the `IArbitrageStrategy` interface
@@ -91,11 +97,19 @@ describe('DemoFlashLoanReceiver', () => {
       //   premiums[i] = arbAmounts[i] * 9 / 10_000
       // }
 
+      // 2a. Send ETH to `DemoFlashLoanReceiver` contract`
+      await dai.transferFrom(
+        daiAddress,
+        demoFlashLoanReceiver.address,
+        hre.ethers.utils.parseUnits('2', 'ether')
+      )
+
       await demoFlashLoanReceiver.executeOperation(
         assetAddresses,
         arbAmounts,
         demoFlashLoanReceiver.address,
       )
+
 
       // 3. Check balance of attacker AND contract
       const contractBalanceAfter = await hre.

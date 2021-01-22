@@ -39,12 +39,20 @@ contract DemoFlashLoanReceiver is IFlashLoanReceiver {
         address initiator
     ) external override returns (bool) {
         for (uint256 i = 0; i < assets.length; i++) {
-            require(assets[0] == address(WETH), "Invalid asset");
-            require(amounts[0] < 0.01 ether, "Invalid amount");
+            require(amounts[i] < 0.01 ether, "Invalid amount");
         }
+
+        require(assets[0] == address(WETH), "Invalid asset");
+        require(
+            assets[1] == address(0x6B175474E89094C44Da98b954EedeAC495271d0F),
+            "Invalid asset"
+        );
 
         //insert the code to invoke FakeArbitrageStrategy here
         STRATEGY.arbitrage{value: amounts[0]}();
+        STRATEGY.arbitrage{value: amounts[1]}();
+        // `120e9` == 120 gwei
+        // STRATEGY.arbitrage{value: 0.015 ether, gas: 120e9}();
 
         return true;
     }
