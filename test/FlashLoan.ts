@@ -74,13 +74,27 @@ describe('DemoFlashLoanReceiver', () => {
       await fakeArbitrageStrategy.whitelistTrader(demoFlashLoanReceiver.address)
 
       // 2. Call `executeOperation()` from `DemoFlashLoanReceiver.sol`
-      const arbAmount = hre.ethers.utils.parseEther('0.005')
-      const WETH_ADDRESS = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+      let arbAmounts = new Array(2).fill(0),
+        assetAddresses = new Array(2).fill(0),
+        premiums = new Array(2).fill(0),
+        // Taken from:
+        // https://github.com/aave/aave-protocol/blob/f7ef52000af2964046857da7e5fe01894a51f2ab/test/flashloan.spec.ts#L143
+        params = '0x10'
+
+      arbAmounts[0] = hre.ethers.utils.parseEther('0.005')
+      arbAmounts[1] = hre.ethers.utils.parseEther('0.001')
+
+      assetAddresses[0] = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2' // WETH
+      assetAddresses[1] = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2' // DAI
+
+      // for (let i = 0; i < arbAmounts.length; i++) {
+      //   premiums[i] = arbAmounts[i] * 9 / 10_000
+      // }
+
       await demoFlashLoanReceiver.executeOperation(
-        WETH_ADDRESS,
-        arbAmount,
-        0,
-        demoFlashLoanReceiver.address
+        assetAddresses,
+        arbAmounts,
+        demoFlashLoanReceiver.address,
       )
 
       // 3. Check balance of attacker AND contract

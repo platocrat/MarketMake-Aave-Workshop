@@ -5,9 +5,7 @@ interface IFlashLoanReceiver {
     function executeOperation(
         address[] calldata assets,
         uint256[] calldata amounts,
-        uint256[] calldata premiums,
-        address initiator,
-        bytes calldata params
+        address initiator
     ) external returns (bool);
 }
 
@@ -38,9 +36,7 @@ contract DemoFlashLoanReceiver is IFlashLoanReceiver {
     function executeOperation(
         address[] calldata assets,
         uint256[] calldata amounts,
-        uint256[] calldata premiums,
-        address initiator,
-        bytes calldata params
+        address initiator
     ) external override returns (bool) {
         require(assets[0] == address(WETH), "Invalid asset");
         require(amounts[0] < 0.01 ether, "Invalid amount");
