@@ -11,12 +11,12 @@ import { Signer } from 'ethers'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { JsonRpcSigner } from '@ethersproject/providers'
-import { W } from '../typechain'
+import { WETH9 } from '../typechain'
 
 describe('DemoFlashLoanReceiver', () => {
   let myAddress: string = '0x97fC2e88D19523F0011Ed3bB4AC592802DC435Ab',
     attacker: string,
-    weth: any,
+    weth: WETH9,
     attackerSigner: JsonRpcSigner,
     fakeArbitrageStrategy: Contract,
     demoFlashLoanReceiver: any
@@ -40,7 +40,7 @@ describe('DemoFlashLoanReceiver', () => {
       '0x8F1034CBE5827b381067fCEfA727C069c26270c4'
     )
 
-    weth = await hre.ethers.getContractAt('IERC20', wethAddress) as Dai
+    weth = await hre.ethers.getContractAt('IERC20', wethAddress) as WETH9
 
     // Used to call `arbitrage()` function from `FakeArbitrageStrategy` contract
     // through the `IArbitrageStrategy` interface
