@@ -98,8 +98,8 @@ describe('DemoFlashLoanReceiver', () => {
       // }
 
       // 2a. Send ETH to `DemoFlashLoanReceiver` contract`
-      await dai.transferFrom(
-        daiAddress,
+      await weth.transferFrom(
+        wethAddress,
         demoFlashLoanReceiver.address,
         hre.ethers.utils.parseUnits('2', 'ether')
       )
